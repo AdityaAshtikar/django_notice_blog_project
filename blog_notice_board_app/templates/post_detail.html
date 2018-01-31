@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Notice - {{ post.id }} | {{ block.super }}
+{% endblock %}
+
+    {% block content %}
+
+    <div class="col-sm-6 col-sm-offset-3">
+
+      <img src="{{ post.image.url }}" alt="Notice's Image" class="img-responsive">
+
+      <h1>{{ post.title }}</h1>
+
+      <h1><small>{% if post.draft %}<span style="color:red;">DRAFT | </span> {% endif %}Posted: {{ post.publish_date }}</small></h1>
+      {% if post.updated > post.timestamp %}
+        <h1><small>Updated: {{ post.updated|timesince}} ago</small></h1>
+      {% endif %}
+      {% if post.user.get_full_name %}
+        <h3>Posted By: {{ post.user.get_full_name }}</h3>
+      {% endif %}
+<hr>
+      <p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></p>
+
+      <hr>
+
+      <p><a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+        Share on Facebook
+      </a>|
+
+      <a href="https://twitter.com/home?status={{ share_string }}%20{{ request.build_absolute_uri }}">
+        Share on Twitter
+      </a>|
+
+      <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>
+
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}/&title={{ share_string }}&summary={{ post.content }}&source={{ request.build_absolute_uri }}">
+        Share on Linkedin
+      </a>|
+
+      <a href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}/&title={{ share_string }}">Share on Reddit</a></p>
+
+      <hr>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <p>{{ post.content|wordwrap:100|linebreaks }}</p>
+        <br><hr>
+        <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+      </div>
+    </div>
+
+    </div>
+
+    {% endblock %}
