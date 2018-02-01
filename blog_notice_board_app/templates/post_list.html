@@ -13,18 +13,18 @@
   <div class="col-sm-12">
     <div class="thumbnail">
         {% if post.image %}
-         <img src='{{ post.image.url }}' class='img-responsive'  >
+         <a href='{{ post.get_absolute_url }}'><img src='{{ post.image.url }}' class='img-responsive'></a>
         {% endif %}
-      <div class="caption">
+      <div class="caption post-detail-item">
         {% if post.draft %}<h3>Staff only: Draft</h3>{% endif %} {% if post.publish_date > today %}<h3>Staff Only: Future Post</h3>{% endif %}
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a> <small>{{ post.publish_date }}</small></h3>
         {% if post.user.get_full_name %}<p>Author: {{ post.user.get_full_name }}</p>{% endif %}
-        <p>{{ post.content|linebreaks|truncatechars:120 }}</p>
+        {{ post.get_markdown }}
         <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
       </div>
     </div>
   </div>
-<hr >
+<hr>
 </div>
 {% endfor %}
 

@@ -6,6 +6,9 @@ from django.utils.text import slugify
 from django.db.models.signals import pre_save
 
 from django.utils import timezone
+from django.utils.safestring import mark_safe
+
+from markdown_deux import markdown
 # Create your models here.
 
 # def upload_location(instance, filename):
@@ -42,8 +45,12 @@ class Post(models.Model):
     class Meta:
         ordering = ["-timestamp", "-updated"]
 
- # to check for one or more same titles then create new slug base on id
+    def get_markdown(self):
+        content = self.content
+        return mark_safe(markdown(content))
 
+
+# to check for one or more same titles then create new slug base on id
 def create_slug(instance, newSlug=None):
     slug = slugify(instance.title)
     if newSlug is not None:

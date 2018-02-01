@@ -13,6 +13,11 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+
+    {% block head_extra %}
+
+    {% endblock %}
+
   </head>
   <body>
 
@@ -34,7 +39,28 @@
     </div>
 
     <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="http://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous">
+    </script>
+
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.12/marked.min.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".content-markdown").each(function(){
+          var content = $(this).text();
+          var markedContent = marked(content);
+          $(this).html(markedContent);
+        })
+        $(".post-detail-item img").each(function(){
+          $(this).addClass("img-responsive");
+        })
+      })
+    </script>
 
   </body>
 </html>

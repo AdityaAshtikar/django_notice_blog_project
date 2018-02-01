@@ -1,8 +1,12 @@
 from django import forms
 
+from pagedown.widgets import PagedownWidget
+
 from posts.models import Post
 
 class PostForm(forms.ModelForm):
+    content = forms.CharField(widget=PagedownWidget)
+    publish_date = forms.DateField(widget=forms.SelectDateWidget)
     class Meta:
         model = Post
         fields = ["title", "content", "image", "draft", "publish_date"]
