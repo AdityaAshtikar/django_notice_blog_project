@@ -11,6 +11,11 @@ from django.utils import timezone
 # for search feature
 from django.db.models import Q
 
+def all_categories(request):
+    categories = Category.objects.all().order_by('topic')
+    context = {"categories" : categories}
+    return render(request, 'all_categories.html', context)
+
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser:
         raise Http404
@@ -57,8 +62,7 @@ def post_list(request):
                                     Q(content__icontains=query) |
                                     Q(user__first_name__icontains=query) |
                                     Q(user__last_name__icontains=query) |
-                                    Q(timestamp__icontains=query) |
-                                    Q(category__icontains=query)
+                                    Q(timestamp__icontains=query)
                                 )
 
     # end!
@@ -104,8 +108,3 @@ def post_delete(request, slug=None):
     instance.delete()
     messages.success(request, "Successfully deleted a Notice")
     return redirect('posts:list')
-
-def all_categories(request):
-    categories = Category.objects.all().order_by('topic')
-    context = {'categories' : categories}
-    return render(request, 'all_categories.html', context)

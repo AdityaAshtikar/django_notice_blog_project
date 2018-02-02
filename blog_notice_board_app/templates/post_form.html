@@ -12,10 +12,36 @@
     <form action="" method="post" enctype="multipart/form-data">
       {% csrf_token %}
 
-      {{ form.as_p }}
+      {# {{ form.as_p }} #}
+
+      {# {{ form.content }} #}
+
+      <label for="title">Title:</label>
+      <p><input type="text" id="title" name="title"></p><br>
+
+      <p><label for="title">Category:</label></p>
+      {{ form.category }}
+      <h5>ctrl+select(Windows) OR cmd+select(Mac)  for mutiple selections</h5>
+      <h5>Default: Event</h5><br>
+
+      <p><label for="content">Content:</label></p>
+      {{ form.content }}<br>
+
+      <p><label for="image">Image:</label></p>
+      {{ form.image }}<br>
+
+      <p><label for="draft">Draft?</label>
+      {{ form.draft }}</p><br>
+
+      <p><label for="title">Publish Date:</label></p>
+      {{ form.publish_date }}
+
+      <hr><br>
 
       <input type="submit" class="btn btn-primary" name="" value="Create a new Notice">
     </form>
+
+    <br><br><br><br>
 
 </div>
 

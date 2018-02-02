@@ -15,23 +15,14 @@ from markdown_deux import markdown
 #     return "%s/%s" %(instance.id, filename)
 
 class Category(models.Model):
-    topic_choices = (
-        ('Event', 'Event'),
-        ('Sports', 'Sports'),
-        ('Fees', 'Fees'),
-        ('Academic', 'Academic'),
-        ('Result', 'Result'),
-        ('Vyom', 'Vyom'),
-        ('Function', 'Function'),
-    )
-    topic = models.CharField(max_length=100, choices=topic_choices, default='Event', editable=True)
+    topic = models.CharField(max_length=100, default="Event", blank=True)
     slug = models.SlugField(help_text="This field will be automatically generated on Save", default="event")
 
     def __str__(self):
         return self.topic
-    #
-    # def get_absolute_url(self):
-    #     return reverse("posts:list", kwargs={"slug": self.slug})
+
+    def get_absolute_url(self):
+        return reverse("posts:list", kwargs={"slug": self.slug})
 
     class Meta:
         ordering = ('topic',)
