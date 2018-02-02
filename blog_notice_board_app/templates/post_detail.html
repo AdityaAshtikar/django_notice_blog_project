@@ -47,7 +47,14 @@
 <div class="post-detail-item">
   {{ post.get_markdown }}
 </div>
+
 <br><hr>
+
+<a href="{% url 'posts:update' post.slug %}" class="btn btn-primary">Update Post</a>
+<a href="{% url 'posts:delete' post.slug %}" class="btn btn-danger">Delete Post</a>
+
+<br><hr>
+
 <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
 </div>
 </div>

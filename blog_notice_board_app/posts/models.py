@@ -14,6 +14,35 @@ from markdown_deux import markdown
 # def upload_location(instance, filename):
 #     return "%s/%s" %(instance.id, filename)
 
+class Category(models.Model):
+    topic_choices = (
+        ('Event', 'Event'),
+        ('Sports', 'Sports'),
+        ('Fees', 'Fees'),
+        ('Academic', 'Academic'),
+        ('Result', 'Result'),
+        ('Vyom', 'Vyom'),
+        ('Function', 'Function'),
+    )
+    topic = models.CharField(max_length=100, choices=topic_choices, default='Event', editable=True)
+    slug = models.SlugField(help_text="This field will be automatically generated on Save", default="event")
+
+    def __str__(self):
+        return self.topic
+    #
+    # def get_absolute_url(self):
+    #     return reverse("posts:list", kwargs={"slug": self.slug})
+
+    class Meta:
+        ordering = ('topic',)
+        verbose_name_plural = 'Categories'
+
+    def save(self, *args, **kwargs):
+        newSlug = slugify(self.topic)
+        self.slug = newSlug
+        super(Category, self).save(*args, **kwargs)
+
+
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
         return super(PostManager, self).filter(draft=False).filter(publish_date__lte=timezone.now())
@@ -21,6 +50,7 @@ class PostManager(models.Manager):
 
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    category = models.ManyToManyField(Category)
     title = models.CharField(max_length=140)
     slug = models.SlugField(unique=True, help_text="This field will be automatically generated according to the Title")
     image = models.ImageField(upload_to="Notices",

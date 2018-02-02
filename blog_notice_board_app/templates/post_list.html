@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-
 <div class='col-sm-6 col-sm-offset-3'>
     <h1>{{ title }}</h1>
 <form method='GET' action=''>
-<input type='text' name='q' placeholder='Search notices using literally anything' value='{{ request.GET.q }}'>
-<input type='submit' value='Search'>
+<input type='text' class="form-control" name='q' placeholder='Search notices using literally anything' value='{{ request.GET.q }}'>
+<input type='submit' class="btn btn-primary btn-sm" value="Search">
 </form><br>
+
+<a href="{% url 'posts:create' %}" class="btn btn-lg btn-primary">Create A New Notice</a>  <br><br>
+
 {% for post in posts %}
 <div class="row">
   <div class="col-sm-12">
