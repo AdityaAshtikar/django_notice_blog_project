@@ -18,7 +18,12 @@
       {% endif %}
       {% if post.user.get_full_name %}
         <h3>Posted By: {{ post.user.get_full_name }}</h3>
-      {% endif %}
+      {% endif %}<br>
+      <h4>Category: {% for cat in post.category.all %}
+        <small>{{ cat.topic }}</small>
+        {% empty %} Some Event!
+        {% endfor %}
+      </h4>
 <hr>
       <p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></p>
 

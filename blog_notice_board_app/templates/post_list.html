@@ -22,7 +22,11 @@
         <h3><a href='{{ post.get_absolute_url }}'>{{ post.title }}</a> <small>{{ post.publish_date }}</small></h3>
         {% if post.user.get_full_name %}<p>Author: {{ post.user.get_full_name }}</p>{% endif %}
         {{ post.get_markdown }}
-        <h4>{{ post.category }}</h4>
+          <h4>Category: {% for cat in post.category.all %}
+            <small>{{ cat.topic }}</small>
+            {% empty %} Some Event!
+            {% endfor %}
+          </h4>
         <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
       </div>
     </div>
