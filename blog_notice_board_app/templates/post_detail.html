@@ -18,9 +18,12 @@
       {% if post.updated > post.timestamp %}
         <h1><small>Updated: {{ post.updated|timesince}} ago</small></h1>
       {% endif %}
-      {% if post.user.get_full_name %}
-        <h3>Posted By: {{ post.user.get_full_name }}</h3>
-      {% endif %}<br>
+        <h3>Posted By:
+          {% if post.user.get_full_name %}{{ post.user.get_full_name }}
+          {% else %}{{ post.user.username }}
+          {% endif %}
+        </h3>
+      <br>
       <h4>Category: {% for cat in post.category.all %}
         <small>{{ cat.topic }}</small>
         {% empty %} Some Event!
@@ -57,10 +60,12 @@
 
 <br><hr>
 
+{% if post.user.username == request.user.username %}
 <a href="{% url 'posts:update' post.slug %}" class="btn btn-primary">Update Post</a>
 <a href="{% url 'posts:delete' post.slug %}" class="btn btn-danger">Delete Post</a>
 
 <br><hr>
+{% endif %}
 
 <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
 </div>

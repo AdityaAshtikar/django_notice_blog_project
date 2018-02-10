@@ -1,7 +1,13 @@
 from django.conf.urls import url
 from posts import views
 
+# these are thebiuld in views used for authentication,
+# we use it only for password change
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
+    url(r'^password-change/$', auth_views.password_change, name='password_change'),
+
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
 

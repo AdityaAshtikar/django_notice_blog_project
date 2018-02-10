@@ -21,7 +21,7 @@ def all_categories(request):
     return render(request, 'all_categories.html', context)
 
 def post_create(request):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
         return redirect(reverse('posts:login'))
     form = PostForm(request.POST or None, request.FILES or None)
@@ -89,32 +89,40 @@ def post_list(request):
     return render(request, "post_list.html", context)
 
 def post_update(request, slug=None):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
         return redirect(reverse('posts:login'))
     post = get_object_or_404(Post, slug=slug)
-    form = PostForm(request.POST or None, request.FILES or None, instance=post)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        messages.success(request, "Updated: %s" %(str(instance.updated)))
-        messages.success(request, "Notice Successfully updated")
-        return HttpResponseRedirect(instance.get_absolute_url())
+    if post.user.username == request.user.username:
+        form = PostForm(request.POST or None, request.FILES or None, instance=post)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, "Updated: %s" %(str(instance.updated)))
+            messages.success(request, "Notice Successfully updated")
+            return HttpResponseRedirect(instance.get_absolute_url())
 
-    context = {
-        "post": post,
-        "form": form
-    }
-    return render(request, "post_form.html", context)
+        context = {
+            "post": post,
+            "form": form
+        }
+        return render(request, "post_form.html", context)
+    else:
+        messages.error(request, "You cannot edit this post!")
+        return redirect(post.get_absolute_url())
 
 def post_delete(request, slug=None):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
         return redirect(reverse('posts:login'))
     instance = get_object_or_404(Post, slug=slug)
-    instance.delete()
-    messages.success(request, "Successfully deleted a Notice")
-    return redirect('posts:list')
+    if instance.user.username == request.user.username:
+        instance.delete()
+        messages.success(request, "Successfully deleted a Notice")
+        return redirect('posts:list')
+    else:
+        messages.error(request, "You cannot delete this notice!")
+        return redirect(instance.get_absolute_url())
 
 def login(request, **kwargs):
     if request.user.is_authenticated():
