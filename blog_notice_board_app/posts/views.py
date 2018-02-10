@@ -142,6 +142,10 @@ def login(request, **kwargs):
     return render(request, 'login.html')
 
 def logout(request):
-    auth.logout(request)
-    messages.success(request, "Successfully logged out!")
-    return redirect(reverse('posts:list'))
+    if request.user.is_authenticated():
+        auth.logout(request)
+        messages.success(request, "Successfully logged out!")
+        return redirect(reverse('posts:list'))
+    else:
+        messages.error(request, "You need to login first")
+        return redirect(reverse('posts:login'))
