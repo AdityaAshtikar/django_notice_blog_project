@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Login - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<br><br><br><br><br><br>
+
+<div class="col-sm-6 col-sm-offset-3">
+
+  <form action="" method="post">
+    {% csrf_token %}
+    Username: <input type="text" name="username" placeholder="Username" class="form-control"><br>
+    Password: <input type="password" name="password" placeholder="Password" class="form-control"><br>
+    <input type="submit" value="Login" class="btn btn-lg btn-info">
+  </form>
+
+  <br><br><br>
+  <a href="{% url 'posts:list' %}">Notices List</a>
+
+</div>
+
+{% endblock %}

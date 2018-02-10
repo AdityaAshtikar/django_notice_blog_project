@@ -6,6 +6,8 @@
 
     {% block content %}
 
+<h4><a href="{% url "posts:list" %}">Back To List of Notices</a></h4>
+
     <div class="col-sm-6 col-sm-offset-3">
 
       <img src="{{ post.image.url }}" alt="Notice's Image" class="img-responsive">

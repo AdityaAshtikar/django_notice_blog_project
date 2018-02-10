@@ -8,6 +8,10 @@ from posts.models import Post, Category
 from posts.forms import PostForm
 from django.utils import timezone
 
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+
+from django.urls import reverse
 # for search feature
 from django.db.models import Q
 
@@ -18,7 +22,8 @@ def all_categories(request):
 
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
+        messages.error(request, "You need to login first")
+        return redirect(reverse('posts:login'))
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -27,7 +32,7 @@ def post_create(request):
         messages.success(request, "Successfully created a Notice")
         return HttpResponseRedirect(instance.get_absolute_url())
 
-    # We can grab the title and content and save it using manually using "Post.objects.create()" [no validation errors will pop up]
+    # We can grab the title and content and save it manually using "Post.objects.create()" [no validation errors will pop up]
     # if request.method == 'POST':
     #     print("Content: " + request.POST.get('content'))
     #     print("Title: " + request.POST.get('title'))
@@ -85,7 +90,8 @@ def post_list(request):
 
 def post_update(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
+        messages.error(request, "You need to login first")
+        return redirect(reverse('posts:login'))
     post = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None, request.FILES or None, instance=post)
     if form.is_valid():
@@ -103,8 +109,31 @@ def post_update(request, slug=None):
 
 def post_delete(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
+        messages.error(request, "You need to login first")
+        return redirect(reverse('posts:login'))
     instance = get_object_or_404(Post, slug=slug)
     instance.delete()
     messages.success(request, "Successfully deleted a Notice")
     return redirect('posts:list')
+
+def login(request, **kwargs):
+    if request.user.is_authenticated():
+        return redirect('posts:list')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect(reverse('posts:list'))
+        else:
+            messages.error(request, "Error Wrong username or password")
+
+    return render(request, 'login.html')
+
+def logout(request):
+    auth.logout(request)
+    messages.success(request, "Successfully logged out!")
+    return redirect(reverse('posts:list'))
