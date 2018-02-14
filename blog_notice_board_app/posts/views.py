@@ -15,6 +15,10 @@ from django.urls import reverse
 # for search feature
 from django.db.models import Q
 
+# for custom user STudent model startproject
+from django.contrib.auth.forms import UserCreationForm
+# end
+
 def all_categories(request):
     categories = Category.objects.all().order_by('topic')
     context = {"categories" : categories}
@@ -149,3 +153,15 @@ def logout(request):
     else:
         messages.error(request, "You need to login first")
         return redirect(reverse('posts:login'))
+
+def register(request):
+    if request.method == 'POST':
+        register_form = UserCreationForm(request.POST)
+        if register_form.is_valid():
+            register_form.save()
+            messages.success(request, "Account Created Successfully")
+            return redirect(reverse('posts:list'))
+    else:
+        register_form = UserCreationForm()
+
+    return render(request, 'register.html', {'form': register_form})

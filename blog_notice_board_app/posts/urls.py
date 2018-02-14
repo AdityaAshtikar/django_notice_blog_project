@@ -6,6 +6,8 @@ from posts import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    url(r'^register/$', views.register, name='register'),
+
     url(r'^password-change/$', auth_views.password_change, name='password_change'),
 
     url(r'^login/$', views.login, name='login'),

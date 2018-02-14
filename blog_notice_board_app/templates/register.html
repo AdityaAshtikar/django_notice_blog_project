@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Register - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="messages">
+  {% if messages %}
+    {% for message in messages  %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<h1>Create Account</h1>
+
+<form action="" method="post">
+  {% csrf_token %}
+
+  {{ form.as_p }}
+
+  <p>
+    <input type="submit" name="submit" value="Register" class="btn btn-lg">
+  </p>
+
+</form>
+
+{% endblock %}

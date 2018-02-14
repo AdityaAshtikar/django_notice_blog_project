@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from markdown_deux import markdown
+
+from django.contrib.auth.models import AbstractUser, User
 # Create your models here.
 
 # def upload_location(instance, filename):
@@ -88,3 +90,23 @@ def pre_save_postmodel_reciever(sender, instance, *args, **kwargs):
         instance.slug = create_slug(instance)
 
 pre_save.connect(pre_save_postmodel_reciever, sender=Post)
+
+# Users and Interfaces
+
+
+class Student(models.Model):
+
+    branch_choices = (
+        ("CSE", "CSE"),
+        ("Mech", "Mech"),
+        ("Civil", 'Civil')
+    )
+
+    user = models.OneToOneField(User, null=True, blank=True)
+    admission_number = models.IntegerField(unique=True)
+    activation_key = models.CharField(max_length=255, default=1)
+    email_validated = models.BooleanField(default=False)
+    department = models.CharField(max_length=10, choices=branch_choices, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
