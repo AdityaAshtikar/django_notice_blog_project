@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+  HomePage - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h1>Welcome To Rungta Colleges</h1>
+  <p>Official Notice Board for all Branches</p>
+  <p>All information regarding everything!</p>
+  <p>
+    <a href="{% url 'posts:register' %}" class="btn btn-primary btn-lg">Sign Up</a>
+  </p>
+    <!--<a class="btn btn-primary btn-lg" href="#" role="button">Log in</a>-->
+    <form action="" method="post">
+      {% csrf_token %}
+      Username: <input type="text" name="username" placeholder="Username" class="form-control"><br>
+      Password: <input type="password" name="password" placeholder="Password" class="form-control"><br>
+      <input type="hidden" name="next" value="{{ next|default:'/posts/' }}"></td>
+      <input type="submit" value="Login" class="btn btn-lg btn-info">
+    </form>
+</div>
+
+{% endblock %}

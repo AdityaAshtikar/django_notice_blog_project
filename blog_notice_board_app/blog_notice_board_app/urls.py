@@ -4,7 +4,10 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+from posts import views
+
 urlpatterns = [
+    # url(r'^$', views.HomePage, name='homepage'),
     url(r'^admin/', admin.site.urls),
     url(r'^posts/', include("posts.urls", namespace="posts")),
 ]

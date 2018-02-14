@@ -19,6 +19,10 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 # end
 
+def homepage(request):
+    if not request.user.is_authenticated():
+        return render(request, 'homepage.html')
+
 def all_categories(request):
     categories = Category.objects.all().order_by('topic')
     context = {"categories" : categories}
@@ -27,7 +31,8 @@ def all_categories(request):
 def post_create(request):
     if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
-        return redirect(reverse('posts:login'))
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -46,6 +51,10 @@ def post_create(request):
     return render(request, "post_form.html", context)
 
 def post_detail(request, slug=None):
+    if not request.user.is_authenticated():
+        messages.error(request, "You need to login first")
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
     post = get_object_or_404(Post, slug=slug)
     if post.draft or post.publish_date > timezone.now().date():
         if not request.user.is_staff or not request.user.is_superuser:
@@ -57,6 +66,10 @@ def post_detail(request, slug=None):
     return render(request, "post_detail.html", context)
 
 def post_list(request):
+    if not request.user.is_authenticated():
+        messages.error(request, "You need to login first")
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
     today = timezone.now().date()
     all_posts = Post.objects.active() #.order_by('-timestamp') - reverse ordering, done in Models
     if request.user.is_staff or request.user.is_superuser:
@@ -95,7 +108,8 @@ def post_list(request):
 def post_update(request, slug=None):
     if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
-        return redirect(reverse('posts:login'))
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
     post = get_object_or_404(Post, slug=slug)
     if post.user.username == request.user.username:
         form = PostForm(request.POST or None, request.FILES or None, instance=post)
@@ -118,7 +132,8 @@ def post_update(request, slug=None):
 def post_delete(request, slug=None):
     if not request.user.is_authenticated():
         messages.error(request, "You need to login first")
-        return redirect(reverse('posts:login'))
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
     instance = get_object_or_404(Post, slug=slug)
     if instance.user.username == request.user.username:
         instance.delete()
@@ -143,7 +158,7 @@ def login(request, **kwargs):
         else:
             messages.error(request, "Error Wrong username or password")
 
-    return render(request, 'login.html')
+    return render(request, 'homepage.html')
 
 def logout(request):
     if request.user.is_authenticated():
@@ -152,7 +167,8 @@ def logout(request):
         return redirect(reverse('posts:list'))
     else:
         messages.error(request, "You need to login first")
-        return redirect(reverse('posts:login'))
+        # return redirect(reverse('posts:login'))
+        return redirect(reverse('posts:homepage'))
 
 def register(request):
     if request.method == 'POST':
