@@ -1,1 +1,0 @@
-web: gunicorn blog_notice_board_app.wsgi --log-file -

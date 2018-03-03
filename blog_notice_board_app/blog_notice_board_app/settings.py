@@ -27,9 +27,7 @@ SECRET_KEY = '51q)f8qz74djdhu-&kmvod4!_jd($zf8vhhahr&m9ja1euh-o$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -155,7 +153,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
 # Configure Django App for Heroku.
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
 
-TEST_RUNNER = 'django_heroku.HerokuDiscoverRunner'
+# TEST_RUNNER = 'django_heroku.HerokuDiscoverRunner'
