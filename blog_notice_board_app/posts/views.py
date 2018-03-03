@@ -164,20 +164,29 @@ def logout(request):
     if request.user.is_authenticated():
         auth.logout(request)
         messages.success(request, "Successfully logged out!")
-        return redirect(reverse('posts:list'))
+        return redirect(reverse('posts:homepage'))
     else:
         messages.error(request, "You need to login first")
         # return redirect(reverse('posts:login'))
         return redirect(reverse('posts:homepage'))
 
 def register(request):
-    if request.method == 'POST':
-        register_form = UserCreationForm(request.POST)
-        if register_form.is_valid():
-            register_form.save()
-            messages.success(request, "Account Created Successfully")
-            return redirect(reverse('posts:list'))
+    if not request.user.is_authenticated():
+        if request.method == 'POST':
+            register_form = UserCreationForm(request.POST)
+            if register_form.is_valid():
+                register_form.save()
+                username = request.POST.get('username')
+                password1 = request.POST.get('password1')
+                user = auth.authenticate(username=username, password=password1)
+                if user is not None:
+                    auth.login(request, user)
+                    print(user.is_authenticated())
+                messages.success(request, "Account Created Successfully")
+                return redirect(reverse('posts:list'))
+        else:
+            register_form = UserCreationForm()
+        return render(request, 'register.html', {'form': register_form})
     else:
-        register_form = UserCreationForm()
-
-    return render(request, 'register.html', {'form': register_form})
+        messages.error(request, "You are already logged in!")
+        return redirect(reverse('posts:list'))
