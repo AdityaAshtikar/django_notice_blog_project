@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from posts import views
 
 urlpatterns = [
-    # url(r'^$', views.HomePage, name='homepage'),
+    url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^posts/', include("posts.urls", namespace="posts")),
 ]

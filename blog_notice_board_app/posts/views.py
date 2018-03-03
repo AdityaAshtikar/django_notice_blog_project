@@ -15,9 +15,12 @@ from django.urls import reverse
 # for search feature
 from django.db.models import Q
 
-# for custom user STudent model startproject
+# for custom user Student model startproject
 from django.contrib.auth.forms import UserCreationForm
 # end
+
+def index(request):
+    return render(request, 'index.html')
 
 def homepage(request):
     if not request.user.is_authenticated():
